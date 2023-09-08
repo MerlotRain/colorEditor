@@ -35,7 +35,7 @@ class QgsGradientPlotEventFilter;
  * \brief A dialog which allows users to modify the properties of a QgsGradientColorRamp.
  * \since QGIS 3.0
  */
-class GUI_EXPORT QgsGradientColorRampDialog : public QDialog, private Ui::QgsGradientColorRampDialogBase
+class  QgsGradientColorRampDialog : public QDialog, private Ui::QgsGradientColorRampDialogBase
 {
     Q_OBJECT
     Q_PROPERTY( QgsGradientColorRamp ramp READ ramp WRITE setRamp )
@@ -131,7 +131,7 @@ class GUI_EXPORT QgsGradientColorRampDialog : public QDialog, private Ui::QgsGra
 // For private only, not part of stable api or exposed to Python bindings
 //
 /// @cond PRIVATE
-class GUI_EXPORT QgsGradientPlotEventFilter: public QObject
+class  QgsGradientPlotEventFilter: public QObject
 {
     Q_OBJECT
 
