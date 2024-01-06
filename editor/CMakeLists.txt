@@ -1,7 +1,7 @@
 file(GLOB_RECURSE ALL_SOURCE "*.cpp")
 file(GLOB_RECURSE ALL_HEAD "*.h")
 
-find_package(Qt6 COMPONENTS Core Gui Widgets Xml REQUIRED)
+find_package(${QT_VERSION_BASE} COMPONENTS Core Gui Widgets REQUIRED)
 
 add_library(colorEditor SHARED ${ALL_SOURCE} ${ALL_HEAD})
 
@@ -13,6 +13,9 @@ generate_export_header(colorEditor
 target_include_directories(colorEditor PUBLIC 
     ${CMAKE_CURRENT_SOURCE_DIR}    
     ${CMAKE_CURRENT_BINARY_DIR}
-    UI)
+    )
 
-target_link_libraries(colorEditor Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Xml)
+target_link_libraries(colorEditor 
+    ${QT_VERSION_BASE}::Core 
+    ${QT_VERSION_BASE}::Gui 
+    ${QT_VERSION_BASE}::Widgets)

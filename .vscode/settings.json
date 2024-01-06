@@ -31,5 +31,8 @@
     "image": "cpp",
     "ios": "cpp",
     "callback": "cpp"
-  }
+  },
+  "cmake.configureArgs": [
+    "-DBUILD_WITH_QT6=ON"
+  ]
 }
