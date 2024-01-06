@@ -24,8 +24,6 @@ public:
     QBrush wheelBrush;
     ColorWheel *q;
 
-    /// @brief
-    /// @param size
     void createImage(QSizeF size);
     void createWheel();
     void createTriangle();
@@ -55,6 +53,8 @@ void ColorWheel::mouseReleaseEvent(QMouseEvent *event) {}
 /* ---------------------------- ColorWheelPrivate --------------------------- */
 
 ColorWheelPrivate::ColorWheelPrivate(ColorWheel *ptr) {}
+
+void ColorWheelPrivate::createImage(QSizeF size) {}
 
 void ColorWheelPrivate::createWheel() {}
 

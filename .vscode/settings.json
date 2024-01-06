@@ -1,0 +1,35 @@
+{
+  "cSpell.words": [
+    "Antialiasing",
+    "Azul",
+    "Cherrywood",
+    "Chrysophase",
+    "COLORBOX",
+    "COLORPREVIEWWIDGET",
+    "COLORRAMPWIDGET",
+    "COLORSLIDERWIDGET",
+    "COLORTEXTWIDGET",
+    "COLORWHEEL",
+    "COLORWIDGET",
+    "COLORWIDGETACTION",
+    "Cretean",
+    "Fushia",
+    "Indicolite",
+    "Moorea",
+    "Nubuck",
+    "pixmap",
+    "qobject",
+    "Quetzel",
+    "qvariant",
+    "Sugilite",
+    "Tecate",
+    "Tzavorite",
+    "Yogo"
+  ],
+  "files.associations": {
+    "qcoreapplication": "cpp",
+    "image": "cpp",
+    "ios": "cpp",
+    "callback": "cpp"
+  }
+}

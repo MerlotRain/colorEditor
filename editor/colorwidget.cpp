@@ -37,4 +37,8 @@ int ColorWidget::hue() const { return 0; }
 
 void ColorWidget::alterColor(QColor &color, int value, ColorComponent component) const {}
 
-const QPixmap &ColorWidget::transparentBackground() { return QPixmap(); }
+const QPixmap &ColorWidget::transparentBackground()
+{
+    static QPixmap pixmap;
+    return pixmap;
+}
