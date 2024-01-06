@@ -1,14 +1,11 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.20)
+project(colorEditor LANGUAGES CXX)
 
-project(coloreditor LANGUAGES CXX)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
+include(GenerateExportHeader)
 
-find_package(Qt5 COMPONENTS Core Gui Widgets Xml REQUIRED)
-
-add_executable(${PROJECT_NAME} "main.cpp" )
-
-target_link_libraries(${PROJECT_NAME} Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Xml)
+add_subdirectory(editor)
+add_subdirectory(examples)
