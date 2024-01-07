@@ -1,4 +1,4 @@
-#include "colorbutton.h"
+#include "colorcombobox.h"
 #include <QAction>
 #include <QColor>
 #include <QColorDialog>
@@ -12,7 +12,7 @@
 
 // clang-format off
 // http://downloads.esri.com/support/documentation/ao_/ArcScene_Basic.pdf
-ColorButton::ColorInfo ColorButton::colorInfos[10][12] = {
+ColorComboBox::ColorInfo ColorComboBox::colorInfos[10][12] = {
 {
             {QStringLiteral("Arctic White"),        QColor(255, 255, 255)},
             {QStringLiteral("Rose Quartz"),         QColor(255, 190, 190)},
@@ -156,7 +156,7 @@ ColorButton::ColorInfo ColorButton::colorInfos[10][12] = {
 };
 // clang-format on
 
-ColorButton::ColorButton(QWidget *parent, QColor color, QSize size)
+ColorComboBox::ColorComboBox(QWidget *parent, QColor color, QSize size)
     : QToolButton(parent), m_currentColor(color)
 {
     setPopupMode(QToolButton::MenuButtonPopup);
@@ -165,9 +165,9 @@ ColorButton::ColorButton(QWidget *parent, QColor color, QSize size)
     setButtonColor(color);
 }
 
-ColorButton::~ColorButton() {}
+ColorComboBox::~ColorComboBox() {}
 
-void ColorButton::setButtonColor(QColor color)
+void ColorComboBox::setButtonColor(QColor color)
 {
     setIconSize(size());
     setIcon(createColorToolButtonIcon(color));
@@ -178,11 +178,11 @@ void ColorButton::setButtonColor(QColor color)
     }
 }
 
-void ColorButton::setShowInvalidColor(bool bShow) {}
+void ColorComboBox::setShowInvalidColor(bool bShow) {}
 
-bool ColorButton::showInvalidColor() { return false; }
+bool ColorComboBox::showInvalidColor() { return false; }
 
-QMenu *ColorButton::createColorMenu(const char *slot, const char *slotColorBoard)
+QMenu *ColorComboBox::createColorMenu(const char *slot, const char *slotColorBoard)
 {
     QAction *pActionTransparent = new QAction(this);
     pActionTransparent->setData(QColor(0, 0, 0, 0));
@@ -244,7 +244,7 @@ QMenu *ColorButton::createColorMenu(const char *slot, const char *slotColorBoard
     return colorMenu;
 }
 
-QIcon ColorButton::createColorIcon(QColor color)
+QIcon ColorComboBox::createColorIcon(QColor color)
 {
     QPixmap pixmap(16, 16);
     QPainter painter(&pixmap);
@@ -253,7 +253,7 @@ QIcon ColorButton::createColorIcon(QColor color)
     return QIcon(pixmap);
 }
 
-QIcon ColorButton::createColorToolButtonIcon(QColor color)
+QIcon ColorComboBox::createColorToolButtonIcon(QColor color)
 {
     int nWidth = this->width();
     int nHeight = this->height();
@@ -286,7 +286,7 @@ QIcon ColorButton::createColorToolButtonIcon(QColor color)
     return icon;
 }
 
-void ColorButton::onColorChanged()
+void ColorComboBox::onColorChanged()
 {
     QAction *pFillColorAction = new QAction(this);
     pFillColorAction = qobject_cast<QAction *>(sender());
@@ -294,7 +294,7 @@ void ColorButton::onColorChanged()
     setButtonColor(color);
 }
 
-void ColorButton::onShowColorBoard()
+void ColorComboBox::onShowColorBoard()
 {
     this->menu()->close();
     QColor color = QColorDialog::getColor(m_currentColor, this, "",

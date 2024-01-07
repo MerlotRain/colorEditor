@@ -1,13 +1,13 @@
 #include <QToolButton>
 #include <coloreditor_global.h>
 
-class COLOR_EDITOR_EXPORT ColorButton : public QToolButton
+class COLOR_EDITOR_EXPORT ColorComboBox : public QToolButton
 {
     Q_OBJECT
 public:
-    explicit ColorButton(QWidget *parent = nullptr, QColor color = Qt::black,
+    explicit ColorComboBox(QWidget *parent = nullptr, QColor color = Qt::black,
                          QSize size = QSize(50, 25));
-    ~ColorButton();
+    ~ColorComboBox();
     void setButtonColor(QColor color);
     inline QColor currentColor() { return m_currentColor; }
     void setShowInvalidColor(bool bShow);
