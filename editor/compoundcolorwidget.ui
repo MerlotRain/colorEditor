@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>674</width>
-    <height>352</height>
+    <height>404</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -252,10 +252,6 @@
           </property>
           <property name="text">
            <string/>
-          </property>
-          <property name="icon">
-           <iconset resource="D:/GitHub/QGIS/images/images.qrc">
-            <normaloff>:/images/themes/default/mActionAtlasNext.svg</normaloff>:/images/themes/default/mActionAtlasNext.svg</iconset>
           </property>
           <property name="iconSize">
            <size>
@@ -633,10 +629,6 @@
         </size>
        </property>
        <widget class="QWidget" name="iconColorBox">
-        <attribute name="icon">
-         <iconset resource="D:/GitHub/QGIS/images/images.qrc">
-          <normaloff>:/images/themes/default/mIconColorBox.svg</normaloff>:/images/themes/default/mIconColorBox.svg</iconset>
-        </attribute>
         <attribute name="title">
          <string/>
         </attribute>
@@ -653,10 +645,6 @@
         </layout>
        </widget>
        <widget class="QWidget" name="widget">
-        <attribute name="icon">
-         <iconset resource="D:/GitHub/QGIS/images/images.qrc">
-          <normaloff>:/images/themes/default/mIconColorWheel.svg</normaloff>:/images/themes/default/mIconColorWheel.svg</iconset>
-        </attribute>
         <attribute name="title">
          <string/>
         </attribute>
@@ -670,10 +658,6 @@
         </layout>
        </widget>
        <widget class="QWidget" name="tab_2">
-        <attribute name="icon">
-         <iconset resource="D:/GitHub/QGIS/images/images.qrc">
-          <normaloff>:/images/themes/default/mIconColorPicker.svg</normaloff>:/images/themes/default/mIconColorPicker.svg</iconset>
-        </attribute>
         <attribute name="title">
          <string/>
         </attribute>
@@ -691,7 +675,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QgsSpinBox" name="mSpinBoxRadius">
+            <widget class="QSpinBox" name="mSpinBoxRadius">
              <property name="suffix">
               <string> px</string>
              </property>
@@ -782,11 +766,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QgsSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header>qgsspinbox.h</header>
-  </customwidget>
-  <customwidget>
    <class>ColorBox</class>
    <extends>QWidget</extends>
    <header>colorwidgets/colorbox.h</header>
@@ -828,8 +807,6 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="D:/GitHub/QGIS/images/images.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

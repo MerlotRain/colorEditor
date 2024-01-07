@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/">
+        <file>mActionAtlasFirst.svg</file>
+        <file>mActionAtlasLast.svg</file>
+        <file>mActionAtlasNext.svg</file>
+        <file>mActionAtlasPrev.svg</file>
+        <file>mActionAtlasSettings.svg</file>
+        <file>mIconColorBox.svg</file>
+        <file>mIconColorLocked.svg</file>
+        <file>mIconColorPicker.svg</file>
+        <file>mIconColorSwatches.svg</file>
+        <file>mIconColorUnlocked.svg</file>
+        <file>mIconColorWheel.svg</file>
+        <file>symbology.svg</file>
+        <file>symbologyAdd.svg</file>
+        <file>symbologyEdit.svg</file>
+        <file>symbologyRemove.svg</file>
+    </qresource>
+</RCC>

@@ -3,12 +3,10 @@
 
 CompoundColorWidget::CompoundColorWidget(QWidget *parent)
     : QWidget(parent)
-    , ui(new Ui::CompoundColorWidget)
 {
-    ui->setupUi(this);
+    setupUi(this);
 }
 
 CompoundColorWidget::~CompoundColorWidget()
 {
-    delete ui;
 }

@@ -1,22 +1,17 @@
 #ifndef COMPOUNDCOLORWIDGET_H
 #define COMPOUNDCOLORWIDGET_H
 
+#include "ui_compoundcolorwidget.h"
 #include <QWidget>
+#include <coloreditor_global.h>
 
-namespace Ui {
-class CompoundColorWidget;
-}
-
-class CompoundColorWidget : public QWidget
+class COLOR_EDITOR_EXPORT CompoundColorWidget : public QWidget, Ui::CompoundColorWidget
 {
     Q_OBJECT
 
 public:
     explicit CompoundColorWidget(QWidget *parent = nullptr);
     ~CompoundColorWidget();
-
-private:
-    Ui::CompoundColorWidget *ui;
 };
 
-#endif // COMPOUNDCOLORWIDGET_H
+#endif// COMPOUNDCOLORWIDGET_H

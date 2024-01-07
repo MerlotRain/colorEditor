@@ -13,6 +13,7 @@ generate_export_header(colorEditor
 target_include_directories(colorEditor PUBLIC 
     ${CMAKE_CURRENT_SOURCE_DIR}    
     ${CMAKE_CURRENT_BINARY_DIR}
+    resources.qrc
     )
 
 target_link_libraries(colorEditor 

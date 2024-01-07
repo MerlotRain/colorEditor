@@ -1,5 +1,4 @@
 #include <QApplication>
-#include <colorbutton.h>
 
 int main(int argc, char **argv)
 {

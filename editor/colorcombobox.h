@@ -1,3 +1,6 @@
+#ifndef COLORCOMBOBOX_H
+#define COLORCOMBOBOX_H
+
 #include <QToolButton>
 #include <coloreditor_global.h>
 
@@ -35,3 +38,5 @@ private:
     QIcon createColorToolButtonIcon(QColor color);
     QIcon createColorIcon(QColor color);
 };
+
+#endif//COLORCOMBOBOX_H
