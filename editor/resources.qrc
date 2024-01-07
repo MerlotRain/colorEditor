@@ -15,5 +15,6 @@
         <file>symbologyAdd.svg</file>
         <file>symbologyEdit.svg</file>
         <file>symbologyRemove.svg</file>
+        <file>transp-background_8x8.png</file>
     </qresource>
 </RCC>

@@ -51,9 +51,9 @@ protected:
 
     static const QPixmap &transparentBackground();
 
-    QColor m_currentColor;
-    ColorComponent m_component;
-    int m_explicitHue = 0;
+    QColor mCurrentColor;
+    ColorComponent mComponent;
+    int mExplicitHue = 0;
 };
 
 #endif//COLORWIDGET_H
