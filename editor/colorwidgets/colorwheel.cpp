@@ -51,7 +51,11 @@ ColorWheel::ColorWheel(QWidget *parent)
     d->wheelBrush = QBrush(wheelGradient);
 }
 
-ColorWheel::~ColorWheel() {}
+ColorWheel::~ColorWheel()
+{
+    delete d;
+    d = nullptr;
+}
 
 QSize ColorWheel::sizeHint() const
 {

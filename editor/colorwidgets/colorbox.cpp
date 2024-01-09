@@ -1,9 +1,14 @@
 #include "colorbox.h"
+#include <QPainter>
+#include <QStyleOptionFrame>
 
 class ColorBoxPrivate
 {
 public:
-    ColorBoxPrivate() = default;
+    ColorBoxPrivate(ColorBox *ptr);
+    ~ColorBoxPrivate();
+
+    ColorBox *q;
 
     bool isDragging = false;
     int margin = 2;
@@ -22,13 +27,45 @@ public:
 
 /* -------------------------------- ColorBox -------------------------------- */
 
-ColorBox::ColorBox(QWidget *parent, ColorComponent component) {}
+ColorBox::ColorBox(QWidget *parent, ColorComponent component)
+    : ColorWidget(parent, component), d(new ColorBoxPrivate(this))
+{
+    setFocusPolicy(Qt::StrongFocus);
+    setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 
-ColorBox::~ColorBox() {}
+    d->boxImage = new QImage(width() - d->margin * 2, height() - d->margin * 2,
+                             QImage::Format_ARGB32);
+}
 
-QSize ColorBox::sizeHint() const { return QSize(); }
+ColorBox::~ColorBox()
+{
+    delete d;
+    d = nullptr;
+}
 
-void ColorBox::paintEvent(QPaintEvent *event) {}
+QSize ColorBox::sizeHint() const
+{
+    const int size = fontMetrics().horizontalAdvance('X') * 22;
+    return QSize(size, size);
+}
+
+void ColorBox::paintEvent(QPaintEvent *event)
+{
+    Q_UNUSED(event)
+    QPainter painter(this);
+
+    QStyleOptionFrame option;
+    option.initFrom(this);
+    option.state = hasFocus() ? QStyle::State_Active : QStyle::State_None;
+    style()->drawPrimitive(QStyle::PE_Frame, &option, &painter);
+
+    if (d->dirty)
+    {
+        d->createBox();
+    }
+
+    
+}
 
 void ColorBox::setComponent(ColorComponent component) {}
 
@@ -43,6 +80,14 @@ void ColorBox::mousePressEvent(QMouseEvent *event) {}
 void ColorBox::mouseReleaseEvent(QMouseEvent *event) {}
 
 /* ----------------------------- ColorBoxPrivate ---------------------------- */
+
+ColorBoxPrivate::ColorBoxPrivate(ColorBox *ptr) : q(ptr) {}
+
+ColorBoxPrivate::~ColorBoxPrivate()
+{
+    delete boxImage;
+    boxImage = nullptr;
+}
 
 void ColorBoxPrivate::createBox() {}
 
