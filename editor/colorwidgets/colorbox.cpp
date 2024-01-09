@@ -1,5 +1,6 @@
 #include "colorbox.h"
 #include <QPainter>
+#include <QResizeEvent>
 #include <QStyleOptionFrame>
 
 class ColorBoxPrivate
@@ -64,14 +65,78 @@ void ColorBox::paintEvent(QPaintEvent *event)
         d->createBox();
     }
 
-    
+    // draw background image
+    painter.drawImage(QPoint(d->margin, d->margin), *d->boxImage);
+
+    // draw cross line
+    const double xPos = d->margin + (width() - 2 * d->margin - 1) *
+                                            static_cast<double>(d->xComponentValue()) /
+                                            static_cast<double>(d->valueChangeX());
+    const double yPos = d->margin + (height() - 2 * d->margin - 1) -
+                        (height() - 2 * d->margin - 1) *
+                                static_cast<double>(d->yComponentValue()) /
+                                static_cast<double>(d->valueChangeY());
+
+    painter.setBrush(Qt::white);
+    painter.setPen(Qt::NoPen);
+
+    painter.drawRect(xPos - 1, d->margin, 3, height() - 2 * d->margin - 1);
+    painter.drawRect(d->margin, yPos - 1, width() - 2 * d->margin - 1, 3);
+    painter.setPen(Qt::black);
+    painter.drawRect(xPos, d->margin, xPos, height() - d->margin - 1);
+    painter.drawRect(d->margin, yPos, width() - d->margin - 1, yPos);
+
+    painter.end();
 }
 
-void ColorBox::setComponent(ColorComponent component) {}
+void ColorBox::setComponent(ColorComponent component)
+{
+    if (component == mComponent)
+    {
+        d->dirty = true;
+    }
+    ColorWidget::setComponent(component);
+}
 
-void ColorBox::setColor(const QColor &color, bool emitSignals) {}
+void ColorBox::setColor(const QColor &color, bool emitSignals)
+{
+    if (mComponent == ColorWidget::Red && mCurrentColor.red() != color.red())
+    {
+        d->dirty = true;
+    }
+    else if (mComponent == ColorWidget::Green && mCurrentColor.green() != color.green())
+    {
+        d->dirty = true;
+    }
+    else if (mComponent == ColorWidget::Blue && mCurrentColor.blue() != color.blue())
+    {
+        d->dirty = true;
+    }
+    else if (mComponent == ColorWidget::Hue && mCurrentColor.hue() != color.hue())
+    {
+        d->dirty = true;
+    }
+    else if (mComponent == ColorWidget::Saturation &&
+             mCurrentColor.hsvSaturation() != color.hsvSaturation())
+    {
+        d->dirty = true;
+    }
+    else if (mComponent == ColorWidget::Value && mCurrentColor.value() != color.value())
+    {
+        d->dirty = true;
+    }
+    ColorWidget::setColor(color, emitSignals);
+}
 
-void ColorBox::resizeEvent(QResizeEvent *event) {}
+void ColorBox::resizeEvent(QResizeEvent *event)
+{
+    d->dirty = true;
+    delete d->boxImage;
+    d->boxImage =
+            new QImage(event->size().width() - d->margin * 2,
+                       event->size().height() - d->margin * 2, QImage::Format_ARGB32);
+    ColorWidget::resizeEvent(event);
+}
 
 void ColorBox::mouseMoveEvent(QMouseEvent *event) {}
 
