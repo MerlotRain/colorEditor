@@ -3,8 +3,9 @@
 #include <QResizeEvent>
 #include <QStyleOptionFrame>
 
-class ColorBoxPrivate
+class ColorBoxPrivate : public QObject
 {
+    Q_OBJECT
 public:
     ColorBoxPrivate(ColorBox *ptr);
     ~ColorBoxPrivate();
@@ -17,8 +18,8 @@ public:
     bool dirty = true;
 
     void createBox();
-    int valueChangeX() const;
-    int valueChangeY() const;
+    int valueRangeX() const;
+    int valueRangeY() const;
     ColorWidget::ColorComponent yComponent() const;
     int yComponentValue() const;
     ColorWidget::ColorComponent xComponent() const;
@@ -71,11 +72,11 @@ void ColorBox::paintEvent(QPaintEvent *event)
     // draw cross line
     const double xPos = d->margin + (width() - 2 * d->margin - 1) *
                                             static_cast<double>(d->xComponentValue()) /
-                                            static_cast<double>(d->valueChangeX());
+                                            static_cast<double>(d->valueRangeX());
     const double yPos = d->margin + (height() - 2 * d->margin - 1) -
                         (height() - 2 * d->margin - 1) *
                                 static_cast<double>(d->yComponentValue()) /
-                                static_cast<double>(d->valueChangeY());
+                                static_cast<double>(d->valueRangeY());
 
     painter.setBrush(Qt::white);
     painter.setPen(Qt::NoPen);
@@ -138,11 +139,39 @@ void ColorBox::resizeEvent(QResizeEvent *event)
     ColorWidget::resizeEvent(event);
 }
 
-void ColorBox::mouseMoveEvent(QMouseEvent *event) {}
+void ColorBox::mouseMoveEvent(QMouseEvent *event)
+{
+    if (d->isDragging)
+    {
+        d->setColorFromPoint(event->pos());
+    }
+    ColorWidget::mouseMoveEvent(event);
+}
 
-void ColorBox::mousePressEvent(QMouseEvent *event) {}
+void ColorBox::mousePressEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton)
+    {
+        d->isDragging = true;
+        d->setColorFromPoint(event->pos());
+    }
+    else
+    {
+        ColorWidget::mousePressEvent(event);
+    }
+}
 
-void ColorBox::mouseReleaseEvent(QMouseEvent *event) {}
+void ColorBox::mouseReleaseEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton)
+    {
+        d->isDragging = false;
+    }
+    else
+    {
+        ColorWidget::mouseReleaseEvent(event);
+    }
+}
 
 /* ----------------------------- ColorBoxPrivate ---------------------------- */
 
@@ -154,24 +183,103 @@ ColorBoxPrivate::~ColorBoxPrivate()
     boxImage = nullptr;
 }
 
-void ColorBoxPrivate::createBox() {}
+void ColorBoxPrivate::createBox()
+{
+    const int maxValueX = boxImage->width();
+    const int maxValueY = boxImage->height();
 
-int ColorBoxPrivate::valueChangeX() const { return 0; }
+    QColor currentColor = QColor(q->mCurrentColor);
+    int colorComponentValue;
 
-int ColorBoxPrivate::valueChangeY() const { return 0; }
+    for (int y = 0; y < maxValueY; ++y)
+    {
+        QRgb *scanLine = (QRgb *) boxImage->scanLine(y);
+
+        colorComponentValue =
+                int(valueRangeY() - valueRangeY() * (double(y) / maxValueY));
+        q->alterColor(currentColor, colorComponentValue, yComponent());
+        for (int x = 0; x < maxValueX; ++x)
+        {
+            colorComponentValue = int(valueRangeX() * (double(x) / maxValueX));
+            q->alterColor(currentColor, colorComponentValue, xComponent());
+            scanLine[x] = currentColor.rgb();
+        }
+    }
+    dirty = false;
+}
+
+int ColorBoxPrivate::valueRangeX() const { return q->componentRange(xComponent()); }
+
+int ColorBoxPrivate::valueRangeY() const { return q->componentRange(yComponent()); }
 
 ColorWidget::ColorComponent ColorBoxPrivate::yComponent() const
 {
-    return ColorWidget::ColorComponent();
+    switch (q->mComponent)
+    {
+        case ColorWidget::Red:
+            return ColorWidget::Green;
+        case ColorWidget::Green:
+            return ColorWidget::Blue;
+        case ColorWidget::Blue:
+            return ColorWidget::Red;
+        case ColorWidget::Hue:
+            return ColorWidget::Saturation;
+        case ColorWidget::Saturation:
+        case ColorWidget::Value:
+            return ColorWidget::Value;
+        default:
+            return ColorWidget::Red;
+    }
 }
 
-int ColorBoxPrivate::yComponentValue() const { return 0; }
+int ColorBoxPrivate::yComponentValue() const { return q->componentValue(yComponent()); }
 
 ColorWidget::ColorComponent ColorBoxPrivate::xComponent() const
 {
-    return ColorWidget::ColorComponent();
+    switch (q->mComponent)
+    {
+        case ColorWidget::Red:
+        case ColorWidget::Green:
+            return ColorWidget::Blue;
+        case ColorWidget::Blue:
+            return ColorWidget::Green;
+        case ColorWidget::Hue:
+        case ColorWidget::Saturation:
+            return ColorWidget::Value;
+        case ColorWidget::Value:
+            return ColorWidget::Saturation;
+        default:
+            return ColorWidget::Red;
+    }
 }
 
-int ColorBoxPrivate::xComponentValue() const { return 0; }
+int ColorBoxPrivate::xComponentValue() const { return q->componentValue(xComponent()); }
 
-void ColorBoxPrivate::setColorFromPoint(QPointF point) {}
+void ColorBoxPrivate::setColorFromPoint(QPointF point)
+{
+    int valX = valueRangeX() * (point.x() - margin) / (q->width() - 2 * margin - 1);
+    valX = std::min(std::max(valX, 0), valueRangeX());
+    int valY = valueRangeY() * valueRangeY() * (point.y() - margin) /
+               (q->height() - 2 * margin - 1);
+    valY = std::min(std::max(valY, 0), valueRangeY());
+
+    QColor color = QColor(q->mCurrentColor);
+    q->alterColor(color, valX, xComponent());
+    q->alterColor(color, valY, yComponent());
+
+    if (color == q->mCurrentColor)
+    {
+        return;
+    }
+
+    if (color.hue() >= 0)
+    {
+        q->mExplicitHue = color.hue();
+    }
+
+    q->mCurrentColor = color;
+    q->update();
+    emit q->colorChanged(color);
+}
+
+#include "colorbox.moc"
