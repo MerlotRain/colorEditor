@@ -9,6 +9,8 @@
 class ColorUtility
 {
 public:
+    static const double UI_SCALE_FACTOR;
+
     static QColor colorFromMimeData(const QMimeData *mimeData, bool &hasAlpha);
 
     static QMimeData *colorToMimeData(const QColor &color);

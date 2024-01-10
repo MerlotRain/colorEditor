@@ -387,7 +387,7 @@ void ColorButton::mouseReleaseEvent(QMouseEvent *event)
     if (d->pickingColor)
     {
         //end color picking operation by sampling the color under cursor
-        d->stopPicking(event->globalPos());
+        d->stopPicking(event->globalPosition().toPoint());
         event->accept();
         return;
     }
@@ -420,7 +420,7 @@ void ColorButton::mouseMoveEvent(QMouseEvent *event)
 {
     if (d->pickingColor)
     {
-        setButtonBackground(ColorUtility::sampleColor(event->globalPos()));
+        setButtonBackground(ColorUtility::sampleColor(event->globalPosition().toPoint()));
         event->accept();
         return;
     }

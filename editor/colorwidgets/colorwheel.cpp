@@ -1,4 +1,5 @@
 #include "colorwheel.h"
+#include "../colorutility.h"
 #include <QConicalGradient>
 #include <QMouseEvent>
 #include <QPainter>
@@ -59,7 +60,8 @@ ColorWheel::~ColorWheel()
 
 QSize ColorWheel::sizeHint() const
 {
-    const int size = fontMetrics().horizontalAdvance('X') * 22;
+    const int size =
+            ColorUtility::UI_SCALE_FACTOR * fontMetrics().horizontalAdvance('X') * 22;
     return QSize(size, size);
 }
 

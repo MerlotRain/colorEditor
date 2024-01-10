@@ -1,4 +1,5 @@
 #include "colorbox.h"
+#include "../colorutility.h"
 #include <QPainter>
 #include <QResizeEvent>
 #include <QStyleOptionFrame>
@@ -47,7 +48,8 @@ ColorBox::~ColorBox()
 
 QSize ColorBox::sizeHint() const
 {
-    const int size = fontMetrics().horizontalAdvance('X') * 22;
+    const int size =
+            ColorUtility::UI_SCALE_FACTOR * fontMetrics().horizontalAdvance('X') * 22;
     return QSize(size, size);
 }
 
