@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/">
+    <qresource prefix="/resources/">
         <file>mActionAtlasFirst.svg</file>
         <file>mActionAtlasLast.svg</file>
         <file>mActionAtlasNext.svg</file>

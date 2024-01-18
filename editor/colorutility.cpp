@@ -16,3 +16,9 @@ QMimeData *ColorUtility::colorToMimeData(const QColor &color) { return nullptr; 
 QString ColorUtility::encodeColor(const QColor &color) { return QString(); }
 
 QColor ColorUtility::sampleColor(QPoint point) { return QColor(); }
+
+QColor ColorUtility::parseColorWithAlpha(const QString &colorStr, bool &containsAlpha,
+                                         bool strictEval)
+{
+    return QColor();
+}

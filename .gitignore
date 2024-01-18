@@ -1,6 +1,7 @@
 .git
 .svn
 .vscode
+.cache
 
 build
 out

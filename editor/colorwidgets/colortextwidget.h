@@ -18,6 +18,7 @@ public:
     Q_ENUM(ColorTextFormat)
 
     explicit ColorTextWidget(QWidget *parent = nullptr);
+    ~ColorTextWidget();
     void setColor(const QColor &color, bool emitSignals = false) override;
     void setAllowOpacity(bool allow);
 
