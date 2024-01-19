@@ -70,10 +70,12 @@ ColorTextWidgetPrivate::ColorTextWidgetPrivate(ColorTextWidget *ptr) : q(ptr)
     menuButton->setIcon(QIcon(":/resources/mIconDropDownMenu.svg"));
     menuButton->setCursor(Qt::ArrowCursor);
     menuButton->setFocusPolicy(Qt::NoFocus);
-    menuButton->setStyleSheet(QStringLiteral("QToolButton {border:none; padding:0px;}"));
+    menuButton->setStyleSheet(
+            QStringLiteral("QToolButton {border:none; padding:0px;}"));
     q->setLayout(hLayout);
 
-    const int frameWidth = lineEdit->style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
+    const int frameWidth =
+            lineEdit->style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
     lineEdit->setStyleSheet(
             QStringLiteral("QLineEdit{padding-right: %1px; }")
                     .arg(menuButton->sizeHint().width() + frameWidth + 1));
@@ -96,8 +98,8 @@ void ColorTextWidgetPrivate::updateText()
             break;
         case ColorTextWidget::HexRgba:
             lineEdit->setText(q->mCurrentColor.name() +
-                              QStringLiteral("%1").arg(q->mCurrentColor.alpha(), 2, 16,
-                                                       QChar('0')));
+                              QStringLiteral("%1").arg(q->mCurrentColor.alpha(),
+                                                       2, 16, QChar('0')));
             break;
         case ColorTextWidget::Rgb:
             lineEdit->setText(tr("rgb(%1, %2, %3)")
@@ -111,7 +113,8 @@ void ColorTextWidgetPrivate::updateText()
                             .arg(q->mCurrentColor.red())
                             .arg(q->mCurrentColor.green())
                             .arg(q->mCurrentColor.blue())
-                            .arg(QString::number(q->mCurrentColor.alphaF(), 'f', 2)));
+                            .arg(QString::number(q->mCurrentColor.alphaF(), 'f',
+                                                 2)));
             break;
         default:
             break;

@@ -15,6 +15,9 @@ public:
     void setColor(const QColor &color, bool emitSignals = false) override;
 
 private:
+    void spinValueChanged(int value);
+
+private:
     ColorSliderWidgetPrivate *d;
     friend class ColorSliderWidgetPrivate;
 };

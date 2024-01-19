@@ -33,9 +33,11 @@ void ColorPreviewWidget::paintEvent(QPaintEvent *event)
     {
         //drawing with two color sections
         const int verticalSplit = std::round(height() / 2.0);
-        d->drawColor(mCurrentColor, QRect(0, 0, width(), verticalSplit), painter);
+        d->drawColor(mCurrentColor, QRect(0, 0, width(), verticalSplit),
+                     painter);
         d->drawColor(d->color2,
-                     QRect(0, verticalSplit, width(), height() - verticalSplit), painter);
+                     QRect(0, verticalSplit, width(), height() - verticalSplit),
+                     painter);
     }
     else if (mCurrentColor.isValid())
     {
@@ -47,10 +49,10 @@ void ColorPreviewWidget::paintEvent(QPaintEvent *event)
 
 QSize ColorPreviewWidget::sizeHint() const
 {
-    return QSize(ColorUtility::UI_SCALE_FACTOR * fontMetrics().horizontalAdvance('X') *
-                         22,
-                 ColorUtility::UI_SCALE_FACTOR * fontMetrics().horizontalAdvance('X') *
-                         22 * 0.75);
+    return QSize(ColorUtility::UI_SCALE_FACTOR *
+                         fontMetrics().horizontalAdvance('X') * 22,
+                 ColorUtility::UI_SCALE_FACTOR *
+                         fontMetrics().horizontalAdvance('X') * 22 * 0.75);
 }
 
 QColor ColorPreviewWidget::color2() const { return d->color2; }
@@ -136,7 +138,8 @@ void ColorPreviewWidget::mouseReleaseEvent(QMouseEvent *event)
 
 /* ------------------------ ColorPreviewWidgetPrivate ----------------------- */
 
-ColorPreviewWidgetPrivate::ColorPreviewWidgetPrivate(ColorPreviewWidget *ptr) : q(ptr)
+ColorPreviewWidgetPrivate::ColorPreviewWidgetPrivate(ColorPreviewWidget *ptr)
+    : q(ptr)
 {
     color2 = QColor();
 }
@@ -152,13 +155,15 @@ void ColorPreviewWidgetPrivate::drawColor(const QColor &color, QRect rect,
         painter.setBrush(checkBrush);
         painter.drawRect(rect);
 
-        //draw half of widget showing solid color, the other half showing color with alpha
+        //draw half of widget showing solid color, the other
+        // half showing color with alpha
 
         //ensure at least a 1px overlap to avoid artifacts
         const QBrush colorBrush = QBrush(color);
         painter.setBrush(colorBrush);
-        painter.drawRect(std::floor(rect.width() / 2.0) + rect.left(), rect.top(),
-                         rect.width() - std::floor(rect.width() / 2.0), rect.height());
+        painter.drawRect(
+                std::floor(rect.width() / 2.0) + rect.left(), rect.top(),
+                rect.width() - std::floor(rect.width() / 2.0), rect.height());
 
         QColor opaqueColor = QColor(color);
         opaqueColor.setAlpha(255);

@@ -21,7 +21,10 @@ public:
 
 /* ------------------------------- ColorDialog ------------------------------ */
 
-ColorDialog::ColorDialog(QWidget *parent, Qt::WindowFlags flags, const QColor &color) {}
+ColorDialog::ColorDialog(QWidget *parent, Qt::WindowFlags flags,
+                         const QColor &color)
+{
+}
 
 ColorDialog::~ColorDialog() {}
 

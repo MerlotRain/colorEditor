@@ -5,7 +5,8 @@
 #include <QWidget>
 #include <coloreditor_global.h>
 
-class COLOR_EDITOR_EXPORT CompoundColorWidget : public QWidget, Ui::CompoundColorWidget
+class COLOR_EDITOR_EXPORT CompoundColorWidget : public QWidget,
+                                                Ui::CompoundColorWidget
 {
     Q_OBJECT
 

@@ -9,7 +9,7 @@ class COLOR_EDITOR_EXPORT ColorComboBox : public QToolButton
     Q_OBJECT
 public:
     explicit ColorComboBox(QWidget *parent = nullptr, QColor color = Qt::black,
-                         QSize size = QSize(50, 25));
+                           QSize size = QSize(50, 25));
     ~ColorComboBox();
     void setButtonColor(QColor color);
     inline QColor currentColor() { return m_currentColor; }

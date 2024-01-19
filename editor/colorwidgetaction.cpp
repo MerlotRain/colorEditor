@@ -22,15 +22,18 @@ public:
 
 /* ------------------------ ColorWidgetActionPrivate ------------------------ */
 
-ColorWidgetActionPrivate::ColorWidgetActionPrivate(ColorWidget *cw, QMenu *_menu,
+ColorWidgetActionPrivate::ColorWidgetActionPrivate(ColorWidget *cw,
+                                                   QMenu *_menu,
                                                    ColorWidgetAction *ptr)
     : q(ptr), menu(_menu), colorWidget(cw), suppressRecurse(false),
       dismissOnColorSelection(true)
 {
     connect(colorWidget, &ColorWidget::colorChanged, this,
             &ColorWidgetActionPrivate::setColor);
-    connect(colorWidget, &ColorWidget::hovered, this, &ColorWidgetActionPrivate::onHover);
-    connect(q, &ColorWidgetAction::hovered, this, &ColorWidgetActionPrivate::onHover);
+    connect(colorWidget, &ColorWidget::hovered, this,
+            &ColorWidgetActionPrivate::onHover);
+    connect(q, &ColorWidgetAction::hovered, this,
+            &ColorWidgetActionPrivate::onHover);
 }
 
 void ColorWidgetActionPrivate::onHover()
@@ -57,7 +60,8 @@ void ColorWidgetActionPrivate::setColor(const QColor &color)
 
 /* ---------------------------- ColorWidgetAction --------------------------- */
 
-ColorWidgetAction::ColorWidgetAction(ColorWidget *cw, QMenu *menu, QWidget *parent)
+ColorWidgetAction::ColorWidgetAction(ColorWidget *cw, QMenu *menu,
+                                     QWidget *parent)
     : QWidgetAction(parent), d(new ColorWidgetActionPrivate(cw, menu, this))
 {
     setDefaultWidget(d->colorWidget);
@@ -72,6 +76,9 @@ void ColorWidgetAction::setDismissOnColorSelection(bool dismiss)
     d->dismissOnColorSelection = dismiss;
 }
 
-bool ColorWidgetAction::dismissOnColorSelection() { return d->dismissOnColorSelection; }
+bool ColorWidgetAction::dismissOnColorSelection()
+{
+    return d->dismissOnColorSelection;
+}
 
 #include "colorwidgetaction.moc"

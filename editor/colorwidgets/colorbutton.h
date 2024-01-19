@@ -8,7 +8,8 @@ class ColorButtonPrivate;
 class COLOR_EDITOR_EXPORT ColorButton : public QToolButton
 {
     Q_OBJECT
-    Q_PROPERTY(QString colorDialogTitle READ colorDialogTitle WRITE setColorDialogTitle)
+    Q_PROPERTY(QString colorDialogTitle READ colorDialogTitle WRITE
+                       setColorDialogTitle)
     Q_PROPERTY(QColor color READ color WRITE setColor)
     Q_PROPERTY(bool allowOpacity READ allowOpacity WRITE setAllowOpacity)
     Q_PROPERTY(Behavior behavior READ behavior WRITE setBehavior)
@@ -25,7 +26,8 @@ public:
     };
     Q_ENUM(Behavior)
 
-    explicit ColorButton(QWidget *parent = nullptr, const QString &cdt = QString());
+    explicit ColorButton(QWidget *parent = nullptr,
+                         const QString &cdt = QString());
     QSize minimumSizeHint() const override;
     QSize sizeHint() const override;
 

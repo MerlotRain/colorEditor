@@ -100,7 +100,8 @@ void ColorButton::setShowMenu(bool show)
 {
     d->showMenu = show;
     setMenu(d->showMenu ? d->menu : nullptr);
-    setPopupMode(d->showMenu ? QToolButton::MenuButtonPopup : QToolButton::DelayedPopup);
+    setPopupMode(d->showMenu ? QToolButton::MenuButtonPopup
+                             : QToolButton::DelayedPopup);
     d->iconSize = QSize();
     //d->setButtonBackground();
 }
@@ -111,15 +112,24 @@ void ColorButton::setBehavior(Behavior behavior) { d->behavior = behavior; }
 
 ColorButton::Behavior ColorButton::behavior() const { return d->behavior; }
 
-void ColorButton::setDefaultColor(const QColor &color) { d->defaultColor = color; }
+void ColorButton::setDefaultColor(const QColor &color)
+{
+    d->defaultColor = color;
+}
 
 QColor ColorButton::defaultColor() const { return d->defaultColor; }
 
-void ColorButton::setShowNoColor(const bool show) { d->showNoColorOption = show; }
+void ColorButton::setShowNoColor(const bool show)
+{
+    d->showNoColorOption = show;
+}
 
 bool ColorButton::showNoColor() const { return d->showNoColorOption; }
 
-void ColorButton::setNoColorString(const QString &str) { d->noColorString = str; }
+void ColorButton::setNoColorString(const QString &str)
+{
+    d->noColorString = str;
+}
 
 void ColorButton::setShowNull(bool show, const QString &nullString)
 {
@@ -216,7 +226,8 @@ void ColorButton::setButtonBackground(const QColor &color)
 
     if (backgroundColor.isValid())
     {
-        const QRectF rect(0, 0, currentIconSize.width(), currentIconSize.height());
+        const QRectF rect(0, 0, currentIconSize.width(),
+                          currentIconSize.height());
         QPainter p;
         p.begin(&pixmap);
         p.setRenderHint(QPainter::Antialiasing);
@@ -313,12 +324,14 @@ bool ColorButton::event(QEvent *event)
         const int saturation = c.saturation();
 
         // create very large preview swatch
-        const int width = static_cast<int>(fontMetrics().horizontalAdvance('X') * 23);
-        const int height = static_cast<int>(width / 1.61803398875);// golden ratio
+        const int width =
+                static_cast<int>(fontMetrics().horizontalAdvance('X') * 23);
+        const int height =
+                static_cast<int>(width / 1.61803398875);// golden ratio
 
         const int margin = static_cast<int>(height * 0.1);
-        QImage icon =
-                QImage(width + 2 * margin, height + 2 * margin, QImage::Format_ARGB32);
+        QImage icon = QImage(width + 2 * margin, height + 2 * margin,
+                             QImage::Format_ARGB32);
         icon.fill(Qt::transparent);
 
         QPainter p;
@@ -343,14 +356,16 @@ bool ColorButton::event(QEvent *event)
         icon.save(&buffer, "PNG", 100);
 
         const QString info =
-                (isProjectColor ? QStringLiteral("<p>%1: %2</p>")
-                                          .arg(tr("Linked color"), d->linkedColorName)
-                                : QString()) +
+                (isProjectColor
+                         ? QStringLiteral("<p>%1: %2</p>")
+                                   .arg(tr("Linked color"), d->linkedColorName)
+                         : QString()) +
                 QStringLiteral("<b>HEX</b> %1<br>"
                                "<b>RGB</b> %2<br>"
                                "<b>HSV</b> %3,%4,%5<p>"
                                "<img src='data:image/png;base64, %0'>")
-                        .arg(QString(data.toBase64()), name, ColorUtility::encodeColor(c))
+                        .arg(QString(data.toBase64()), name,
+                             ColorUtility::encodeColor(c))
                         .arg(hue)
                         .arg(saturation)
                         .arg(value);
@@ -420,7 +435,8 @@ void ColorButton::mouseMoveEvent(QMouseEvent *event)
 {
     if (d->pickingColor)
     {
-        setButtonBackground(ColorUtility::sampleColor(event->globalPosition().toPoint()));
+        setButtonBackground(
+                ColorUtility::sampleColor(event->globalPosition().toPoint()));
         event->accept();
         return;
     }
@@ -513,7 +529,8 @@ void ColorButton::wheelEvent(QWheelEvent *event)
         const double increment =
                 ((event->modifiers() & Qt::ControlModifier) ? 0.01 : 0.1) *
                 (event->angleDelta().y() > 0 ? 1 : -1);
-        const double alpha = std::min(std::max(0.0, d->color.alphaF() + increment), 1.0);
+        const double alpha =
+                std::min(std::max(0.0, d->color.alphaF() + increment), 1.0);
         d->color.setAlphaF(alpha);
 
         setButtonBackground();
@@ -530,7 +547,8 @@ void ColorButton::wheelEvent(QWheelEvent *event)
 
 ColorButtonPrivate::ColorButtonPrivate(ColorButton *ptr) : q(ptr)
 {
-    connect(q, &QAbstractButton::clicked, this, &ColorButtonPrivate::buttonClicked);
+    connect(q, &QAbstractButton::clicked, this,
+            &ColorButtonPrivate::buttonClicked);
     menu = new QMenu(q);
     connect(menu, &QMenu::aboutToShow, this, &ColorButtonPrivate::prepareMenu);
     q->setMenu(menu);
@@ -541,13 +559,15 @@ ColorButtonPrivate::ColorButtonPrivate(ColorButton *ptr) : q(ptr)
 #else
     minimumSize = QSize(120, 28);
 #endif
-    minimumSize.setHeight(std::max(static_cast<int>(q->fontMetrics().height() * 1.1),
-                                   minimumSize.height()));
+    minimumSize.setHeight(
+            std::max(static_cast<int>(q->fontMetrics().height() * 1.1),
+                     minimumSize.height()));
 }
 
 ColorButtonPrivate::~ColorButtonPrivate() {}
 
-bool ColorButtonPrivate::colorFromMimeData(const QMimeData *mimeData, QColor &resultColor)
+bool ColorButtonPrivate::colorFromMimeData(const QMimeData *mimeData,
+                                           QColor &resultColor)
 {
 
     bool hasAlpha = false;

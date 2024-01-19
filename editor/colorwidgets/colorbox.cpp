@@ -48,8 +48,8 @@ ColorBox::~ColorBox()
 
 QSize ColorBox::sizeHint() const
 {
-    const int size =
-            ColorUtility::UI_SCALE_FACTOR * fontMetrics().horizontalAdvance('X') * 22;
+    const int size = ColorUtility::UI_SCALE_FACTOR *
+                     fontMetrics().horizontalAdvance('X') * 22;
     return QSize(size, size);
 }
 
@@ -72,9 +72,10 @@ void ColorBox::paintEvent(QPaintEvent *event)
     painter.drawImage(QPoint(d->margin, d->margin), *d->boxImage);
 
     // draw cross line
-    const double xPos = d->margin + (width() - 2 * d->margin - 1) *
-                                            static_cast<double>(d->xComponentValue()) /
-                                            static_cast<double>(d->valueRangeX());
+    const double xPos =
+            d->margin + (width() - 2 * d->margin - 1) *
+                                static_cast<double>(d->xComponentValue()) /
+                                static_cast<double>(d->valueRangeX());
     const double yPos = d->margin + (height() - 2 * d->margin - 1) -
                         (height() - 2 * d->margin - 1) *
                                 static_cast<double>(d->yComponentValue()) /
@@ -107,15 +108,18 @@ void ColorBox::setColor(const QColor &color, bool emitSignals)
     {
         d->dirty = true;
     }
-    else if (mComponent == ColorWidget::Green && mCurrentColor.green() != color.green())
+    else if (mComponent == ColorWidget::Green &&
+             mCurrentColor.green() != color.green())
     {
         d->dirty = true;
     }
-    else if (mComponent == ColorWidget::Blue && mCurrentColor.blue() != color.blue())
+    else if (mComponent == ColorWidget::Blue &&
+             mCurrentColor.blue() != color.blue())
     {
         d->dirty = true;
     }
-    else if (mComponent == ColorWidget::Hue && mCurrentColor.hue() != color.hue())
+    else if (mComponent == ColorWidget::Hue &&
+             mCurrentColor.hue() != color.hue())
     {
         d->dirty = true;
     }
@@ -124,7 +128,8 @@ void ColorBox::setColor(const QColor &color, bool emitSignals)
     {
         d->dirty = true;
     }
-    else if (mComponent == ColorWidget::Value && mCurrentColor.value() != color.value())
+    else if (mComponent == ColorWidget::Value &&
+             mCurrentColor.value() != color.value())
     {
         d->dirty = true;
     }
@@ -135,9 +140,9 @@ void ColorBox::resizeEvent(QResizeEvent *event)
 {
     d->dirty = true;
     delete d->boxImage;
-    d->boxImage =
-            new QImage(event->size().width() - d->margin * 2,
-                       event->size().height() - d->margin * 2, QImage::Format_ARGB32);
+    d->boxImage = new QImage(event->size().width() - d->margin * 2,
+                             event->size().height() - d->margin * 2,
+                             QImage::Format_ARGB32);
     ColorWidget::resizeEvent(event);
 }
 
@@ -210,9 +215,15 @@ void ColorBoxPrivate::createBox()
     dirty = false;
 }
 
-int ColorBoxPrivate::valueRangeX() const { return q->componentRange(xComponent()); }
+int ColorBoxPrivate::valueRangeX() const
+{
+    return q->componentRange(xComponent());
+}
 
-int ColorBoxPrivate::valueRangeY() const { return q->componentRange(yComponent()); }
+int ColorBoxPrivate::valueRangeY() const
+{
+    return q->componentRange(yComponent());
+}
 
 ColorWidget::ColorComponent ColorBoxPrivate::yComponent() const
 {
@@ -234,7 +245,10 @@ ColorWidget::ColorComponent ColorBoxPrivate::yComponent() const
     }
 }
 
-int ColorBoxPrivate::yComponentValue() const { return q->componentValue(yComponent()); }
+int ColorBoxPrivate::yComponentValue() const
+{
+    return q->componentValue(yComponent());
+}
 
 ColorWidget::ColorComponent ColorBoxPrivate::xComponent() const
 {
@@ -255,11 +269,15 @@ ColorWidget::ColorComponent ColorBoxPrivate::xComponent() const
     }
 }
 
-int ColorBoxPrivate::xComponentValue() const { return q->componentValue(xComponent()); }
+int ColorBoxPrivate::xComponentValue() const
+{
+    return q->componentValue(xComponent());
+}
 
 void ColorBoxPrivate::setColorFromPoint(QPointF point)
 {
-    int valX = valueRangeX() * (point.x() - margin) / (q->width() - 2 * margin - 1);
+    int valX = valueRangeX() * (point.x() - margin) /
+               (q->width() - 2 * margin - 1);
     valX = std::min(std::max(valX, 0), valueRangeX());
     int valY = valueRangeY() * valueRangeY() * (point.y() - margin) /
                (q->height() - 2 * margin - 1);

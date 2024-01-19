@@ -60,8 +60,8 @@ ColorWheel::~ColorWheel()
 
 QSize ColorWheel::sizeHint() const
 {
-    const int size =
-            ColorUtility::UI_SCALE_FACTOR * fontMetrics().horizontalAdvance('X') * 22;
+    const int size = ColorUtility::UI_SCALE_FACTOR *
+                     fontMetrics().horizontalAdvance('X') * 22;
     return QSize(size, size);
 }
 
@@ -70,7 +70,8 @@ void ColorWheel::paintEvent(QPaintEvent *event)
     Q_UNUSED(event)
     QPainter painter(this);
 
-    if (d->widgetImage.isNull() || d->wheelImage.isNull() || d->triangleImage.isNull())
+    if (d->widgetImage.isNull() || d->wheelImage.isNull() ||
+        d->triangleImage.isNull())
     {
         d->createImage(size());
     }
@@ -84,8 +85,8 @@ void ColorWheel::paintEvent(QPaintEvent *event)
     }
 
     // draw wheel centered on widget
-    const QPointF center =
-            QPointF(d->widgetImage.width() / 2.0, d->widgetImage.height() / 2.0);
+    const QPointF center = QPointF(d->widgetImage.width() / 2.0,
+                                   d->widgetImage.height() / 2.0);
     imagePainter.drawImage(QPointF(center.x() - (d->wheelImage.width() / 2.0),
                                    center.y() - (d->wheelImage.height() / 2.0)),
                            d->wheelImage);
@@ -116,7 +117,8 @@ void ColorWheel::paintEvent(QPaintEvent *event)
                            d->triangleImage);
 
     // draw current color marker
-    const double triangleRadius = length - d->wheelThickness * devicePixelRatioF() - 1;
+    const double triangleRadius =
+            length - d->wheelThickness * devicePixelRatioF() - 1;
     const double lightless = mCurrentColor.lightnessF();
     const double huaRadians = (h * M_PI / 180.0);
     const double hx = std::cos(huaRadians) * triangleRadius;
@@ -128,8 +130,8 @@ void ColorWheel::paintEvent(QPaintEvent *event)
     const double mx = (sx + vx) / 2.0;
     const double my = (sy + vy) / 2.0;
 
-    const double a =
-            (1 - 2.0 * std::fabs(lightless - 0.5)) * mCurrentColor.hslSaturationF();
+    const double a = (1 - 2.0 * std::fabs(lightless - 0.5)) *
+                     mCurrentColor.hslSaturationF();
     const double x = sx + (vx - sx) * lightless + (hx - mx) * a;
     const double y = sy + (vy - sy) * lightless + (hy - my) * a;
     const QPointF triangleCenter = QPointF(x, y);
@@ -145,7 +147,8 @@ void ColorWheel::paintEvent(QPaintEvent *event)
     imagePainter.setPen(pen);
     imagePainter.setBrush(Qt::NoBrush);
     imagePainter.drawEllipse(QPointF(x + center.x(), y + center.y()),
-                             4.0 * devicePixelRatioF(), 4.0 * devicePixelRatioF());
+                             4.0 * devicePixelRatioF(),
+                             4.0 * devicePixelRatioF());
 
     // draw image onto widget
     painter.drawImage(QRect(0, 0, width(), height()), d->widgetImage);
@@ -167,9 +170,10 @@ void ColorWheel::resizeEvent(QResizeEvent *event)
 #ifdef Q_OS_WIN
     if (event->size().width() > parentWidget()->size().width())
     {
-        QSize newSize(
-                std::min(event->size().width(), parentWidget()->size().width() - 2),
-                std::min(event->size().height(), parentWidget()->size().height() - 2));
+        QSize newSize(std::min(event->size().width(),
+                               parentWidget()->size().width() - 2),
+                      std::min(event->size().height(),
+                               parentWidget()->size().height() - 2));
         resize(newSize);
         d->createImage(newSize);
     }
@@ -193,10 +197,11 @@ void ColorWheel::mousePressEvent(QMouseEvent *event)
     if (event->button() == Qt::LeftButton)
     {
         d->dragging = true;
-        const QLineF line =
-                QLineF(width() / 2.0, height() / 2.0, event->pos().x(), event->pos().y());
+        const QLineF line = QLineF(width() / 2.0, height() / 2.0,
+                                   event->pos().x(), event->pos().y());
         const double innerLength =
-                d->wheelImage.width() / 2.0 / devicePixelRatioF() - d->wheelThickness;
+                d->wheelImage.width() / 2.0 / devicePixelRatioF() -
+                d->wheelThickness;
         if (line.length() < innerLength)
         {
             d->controlPart = ColorWheelPrivate::Triangle;
@@ -232,14 +237,15 @@ ColorWheelPrivate::ColorWheelPrivate(ColorWheel *ptr) : q(ptr) {}
 
 void ColorWheelPrivate::createImage(QSizeF size)
 {
-    const double wheelSize = std::min(size.width(), size.height()) - margin * 2.0;
+    const double wheelSize =
+            std::min(size.width(), size.height()) - margin * 2.0;
     wheelThickness = wheelSize / 15.0;
 
     const double pixelRatio = q->devicePixelRatioF();
-    wheelImage =
-            QImage(wheelSize * pixelRatio, wheelSize * pixelRatio, QImage::Format_ARGB32);
-    triangleImage =
-            QImage(wheelSize * pixelRatio, wheelSize * pixelRatio, QImage::Format_ARGB32);
+    wheelImage = QImage(wheelSize * pixelRatio, wheelSize * pixelRatio,
+                        QImage::Format_ARGB32);
+    triangleImage = QImage(wheelSize * pixelRatio, wheelSize * pixelRatio,
+                           QImage::Format_ARGB32);
     widgetImage = QImage(size.width() * pixelRatio, size.height() * pixelRatio,
                          QImage::Format_ARGB32);
 
@@ -281,7 +287,8 @@ void ColorWheelPrivate::createTriangle()
         return;
     }
 
-    const QPointF center = QPointF(wheelImage.width() / 2.0, wheelImage.height() / 2.0);
+    const QPointF center =
+            QPointF(wheelImage.width() / 2.0, wheelImage.height() / 2.0);
     triangleImage.fill(Qt::transparent);
 
     QPainter imagePainter(&triangleImage);
@@ -302,14 +309,16 @@ void ColorWheelPrivate::createTriangle()
     QLineF line1 = QLineF(center.x(), center.y(),
                           center.x() - triangleRadius * std::cos(M_PI / 3.0),
                           center.y() - triangleRadius * std::sin(M_PI / 3.0));
-    QLineF line2 =
-            QLineF(center.x(), center.y(), center.x() + triangleRadius, center.y());
+    QLineF line2 = QLineF(center.x(), center.y(), center.x() + triangleRadius,
+                          center.y());
     QLineF line3 = QLineF(center.x(), center.y(),
                           center.x() - triangleRadius * std::cos(M_PI / 3.0),
                           center.y() + triangleRadius * std::sin(M_PI / 3.0));
     QLineF line4 = QLineF(center.x(), center.y(),
-                          center.x() - triangleRadius * std::cos(M_PI / 3.0), center.y());
-    QLineF line5 = QLineF(center.x(), center.y(), (line2.p2().x() + line1.p2().x()) / 2.0,
+                          center.x() - triangleRadius * std::cos(M_PI / 3.0),
+                          center.y());
+    QLineF line5 = QLineF(center.x(), center.y(),
+                          (line2.p2().x() + line1.p2().x()) / 2.0,
                           (line2.p2().y() + line1.p2().y()) / 2.0);
     line1.setAngle(line1.angle() + angle);
     line2.setAngle(line2.angle() + angle);
@@ -322,7 +331,8 @@ void ColorWheelPrivate::createTriangle()
     const QPointF p4 = line4.p2();
     const QPointF p5 = line5.p2();
 
-    //inspired by Tim Baumann's work at https://github.com/timjb/colortriangle/blob/master/colortriangle.js
+    //inspired by Tim Baumann's work at 
+    // https://github.com/timjb/colortriangle/blob/master/colortriangle.js
     QLinearGradient colorGrad = QLinearGradient(p4.x(), p4.y(), p2.x(), p2.y());
     colorGrad.setColorAt(0, alphaColor);
     colorGrad.setColorAt(1, pureColor);
@@ -344,9 +354,10 @@ void ColorWheelPrivate::createTriangle()
     imagePainter.setBrush(QBrush(whiteGrad));
     imagePainter.drawPolygon(triangle);
 
-    //above process results in some small artifacts on the edge of the triangle. Let's clear these up
-    //use source composition mode and draw an outline using a transparent pen
-    //this clears the edge pixels and leaves a nice smooth image
+    // above process results in some small artifacts on the edge of the 
+    // triangle. Let's clear these up use source composition mode and 
+    // draw an outline using a transparent pen this clears the edge 
+    // pixels and leaves a nice smooth image
     imagePainter.setCompositionMode(QPainter::CompositionMode_Source);
     imagePainter.setBrush(Qt::NoBrush);
     imagePainter.setPen(QPen(Qt::transparent));
@@ -376,7 +387,8 @@ void ColorWheelPrivate::setColorFromPos(QPointF pos)
 
         double eventAngleRadians = line.angle() * M_PI / 180.0;
         const double hueRadians = h * M_PI / 180.0;
-        double rad0 = std::fmod(eventAngleRadians + 2.0 * M_PI - hueRadians, 2.0 * M_PI);
+        double rad0 = std::fmod(eventAngleRadians + 2.0 * M_PI - hueRadians,
+                                2.0 * M_PI);
         double rad1 = std::fmod(rad0, ((2.0 / 3.0) * M_PI)) - (M_PI / 3.0);
         const double length = wheelImage.width() / 2.0 / q->devicePixelRatioF();
         const double triangleLength = length - wheelThickness - 1;
@@ -393,7 +405,8 @@ void ColorWheelPrivate::setColorFromPos(QPointF pos)
             rad2 = std::min(rad2, M_PI / 3.0);
             rad2 = std::max(rad2, -M_PI / 3.0);
             eventAngleRadians += rad2 - rad1;
-            rad0 = std::fmod(eventAngleRadians + 2.0 * M_PI - hueRadians, 2.0 * M_PI);
+            rad0 = std::fmod(eventAngleRadians + 2.0 * M_PI - hueRadians,
+                             2.0 * M_PI);
             rad1 = std::fmod(rad0, ((2.0 / 3.0) * M_PI)) - (M_PI / 3.0);
             b = std::tan(rad1) * a;
             r = std::sqrt(a * a + b * b);
@@ -405,8 +418,10 @@ void ColorWheelPrivate::setColorFromPos(QPointF pos)
         const double newS = (((std::cos(rad0) * r) + (triangleLength / 2.0)) /
                              (1.5 * triangleLength)) /
                             widthShare;
-        s = std::min(static_cast<int>(std::round(std::max(0.0, newS) * 255.0)), 255);
-        l = std::min(static_cast<int>(std::round(std::max(0.0, newL) * 255.0)), 255);
+        s = std::min(static_cast<int>(std::round(std::max(0.0, newS) * 255.0)),
+                     255);
+        l = std::min(static_cast<int>(std::round(std::max(0.0, newL) * 255.0)),
+                     255);
         newColor = QColor::fromHsl(h, s, l);
         //explicitly set the hue again, so that it's exact
         newColor.setHsv(h, newColor.hsvSaturation(), newColor.value(), alpha);

@@ -8,7 +8,8 @@ class COLOR_EDITOR_EXPORT ColorBox : public ColorWidget
 {
     Q_OBJECT
 public:
-    explicit ColorBox(QWidget *parent = nullptr, ColorComponent component = Multiple);
+    explicit ColorBox(QWidget *parent = nullptr,
+                      ColorComponent component = Multiple);
     ~ColorBox();
 
     QSize sizeHint() const override;

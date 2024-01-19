@@ -182,7 +182,8 @@ void ColorComboBox::setShowInvalidColor(bool bShow) {}
 
 bool ColorComboBox::showInvalidColor() { return false; }
 
-QMenu *ColorComboBox::createColorMenu(const char *slot, const char *slotColorBoard)
+QMenu *ColorComboBox::createColorMenu(const char *slot,
+                                      const char *slotColorBoard)
 {
     QAction *pActionTransparent = new QAction(this);
     pActionTransparent->setData(QColor(0, 0, 0, 0));

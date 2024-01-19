@@ -19,7 +19,9 @@ public:
 
     static QColor sampleColor(QPoint point);
 
-    static QColor parseColorWithAlpha(const QString& colorStr, bool& containsAlpha, bool strictEval = false);
+    static QColor parseColorWithAlpha(const QString &colorStr,
+                                      bool &containsAlpha,
+                                      bool strictEval = false);
 };
 
 #endif//COLORUTILITY_H

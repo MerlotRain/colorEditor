@@ -42,11 +42,13 @@ QSize ColorRampWidget::sizeHint() const
     {
         return QSize(ColorUtility::UI_SCALE_FACTOR *
                              fontMetrics().horizontalAdvance('X') * 22,
-                     ColorUtility::UI_SCALE_FACTOR * fontMetrics().height() * 1.3);
+                     ColorUtility::UI_SCALE_FACTOR * fontMetrics().height() *
+                             1.3);
     }
     else
     {
-        return QSize(ColorUtility::UI_SCALE_FACTOR * fontMetrics().height() * 1.3,
+        return QSize(ColorUtility::UI_SCALE_FACTOR * fontMetrics().height() *
+                             1.3,
                      ColorUtility::UI_SCALE_FACTOR *
                              fontMetrics().horizontalAdvance('X') * 22);
     }
@@ -61,8 +63,8 @@ void ColorRampWidget::paintEvent(QPaintEvent *event)
     {
         QStyleOptionFrame option;
         option.initFrom(this);
-        option.state =
-                hasFocus() ? QStyle::State_KeyboardFocusChange : QStyle::State_None;
+        option.state = hasFocus() ? QStyle::State_KeyboardFocusChange
+                                  : QStyle::State_None;
         style()->drawPrimitive(QStyle::PE_Frame, &option, &painter);
     }
 
@@ -77,8 +79,9 @@ void ColorRampWidget::paintEvent(QPaintEvent *event)
     if (mComponent != ColorWidget::Alpha)
     {
         const int maxValue =
-                (d->orientation == ColorRampWidget::Horizontal ? width() : height()) - 1 -
-                2 * d->margin;
+                (d->orientation == ColorRampWidget::Horizontal ? width()
+                                                               : height()) -
+                1 - 2 * d->margin;
         QColor color = QColor(mCurrentColor);
         color.setAlpha(255);
         QPen pen;
@@ -88,8 +91,8 @@ void ColorRampWidget::paintEvent(QPaintEvent *event)
 
         for (int c = 0; c <= maxValue; ++c)
         {
-            int colorVal = static_cast<int>(componentRange() * static_cast<double>(c) /
-                                            maxValue);
+            int colorVal = static_cast<int>(componentRange() *
+                                            static_cast<double>(c) / maxValue);
             if (d->orientation == ColorRampWidget::Vertical)
             {
                 colorVal = componentRange() - colorVal;
@@ -108,7 +111,8 @@ void ColorRampWidget::paintEvent(QPaintEvent *event)
             }
             else
             {
-                painter.drawLine(QLineF(d->margin, c + d->margin, width() - d->margin - 1,
+                painter.drawLine(QLineF(d->margin, c + d->margin,
+                                        width() - d->margin - 1,
                                         c + d->margin));
             }
         }
@@ -118,16 +122,19 @@ void ColorRampWidget::paintEvent(QPaintEvent *event)
         const QBrush checkBrush = QBrush(transparentBackground());
         painter.setBrush(checkBrush);
         painter.setPen(Qt::NoPen);
-        painter.drawRect(QRectF(d->margin, d->margin, width() - 2 * d->margin - 1,
+        painter.drawRect(QRectF(d->margin, d->margin,
+                                width() - 2 * d->margin - 1,
                                 height() - 2 * d->margin - 1));
         QLinearGradient colorGrad;
         if (d->orientation == ColorRampWidget::Horizontal)
         {
-            colorGrad = QLinearGradient(d->margin, 0, width() - d->margin - 1, 0);
+            colorGrad =
+                    QLinearGradient(d->margin, 0, width() - d->margin - 1, 0);
         }
         else
         {
-            colorGrad = QLinearGradient(0, d->margin, 0, height() - d->margin - 1);
+            colorGrad =
+                    QLinearGradient(0, d->margin, 0, height() - d->margin - 1);
         }
         QColor transparent = QColor(mCurrentColor);
         transparent.setAlpha(0);
@@ -137,7 +144,8 @@ void ColorRampWidget::paintEvent(QPaintEvent *event)
         colorGrad.setColorAt(1, opaque);
         const QBrush colorBrush = QBrush(colorGrad);
         painter.setBrush(colorBrush);
-        painter.drawRect(QRectF(d->margin, d->margin, width() - 2 * d->margin - 1,
+        painter.drawRect(QRectF(d->margin, d->margin,
+                                width() - 2 * d->margin - 1,
                                 height() - 2 * d->margin - 1));
     }
 
@@ -146,10 +154,11 @@ void ColorRampWidget::paintEvent(QPaintEvent *event)
         painter.setRenderHint(QPainter::Antialiasing);
         painter.setBrush(QBrush(Qt::black));
         painter.setPen(Qt::NoPen);
-        painter.translate(d->margin + (width() - 2 * d->margin) *
-                                              static_cast<double>(componentValue()) /
-                                              componentRange(),
-                          d->margin - 1);
+        painter.translate(
+                d->margin + (width() - 2 * d->margin) *
+                                    static_cast<double>(componentValue()) /
+                                    componentRange(),
+                d->margin - 1);
         painter.drawPolygon(d->topTriangle);
         painter.translate(0, height() - d->margin - 2);
         painter.setBrush(QBrush(Qt::white));
@@ -164,9 +173,11 @@ void ColorRampWidget::paintEvent(QPaintEvent *event)
                                     componentRange();
         painter.setBrush(QBrush(Qt::white));
         painter.setPen(Qt::NoPen);
-        painter.drawRect(QRectF(d->margin, yPos - 1, width() - 2 * d->margin - 1, 3));
+        painter.drawRect(
+                QRectF(d->margin, yPos - 1, width() - 2 * d->margin - 1, 3));
         painter.setPen(Qt::black);
-        painter.drawLine(QLineF(d->margin, yPos, width() - d->margin - 1, yPos));
+        painter.drawLine(
+                QLineF(d->margin, yPos, width() - d->margin - 1, yPos));
     }
 }
 

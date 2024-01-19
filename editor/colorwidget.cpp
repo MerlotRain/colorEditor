@@ -17,7 +17,10 @@ ColorWidget::ColorWidget(QWidget *parent, ColorComponent component)
 
 QColor ColorWidget::color() const { return mCurrentColor; }
 
-ColorWidget::ColorComponent ColorWidget::component() const { return ColorComponent(); }
+ColorWidget::ColorComponent ColorWidget::component() const
+{
+    return ColorComponent();
+}
 
 int ColorWidget::componentValue() const { return componentValue(mComponent); }
 
@@ -28,7 +31,8 @@ QPixmap ColorWidget::createDragIcon(const QColor &color)
     pixmap.fill(Qt::transparent);
     QPainter painter;
     painter.begin(&pixmap);
-    painter.fillRect(QRect(0, 0, iconSize, iconSize), QBrush(QColor(200, 200, 200)));
+    painter.fillRect(QRect(0, 0, iconSize, iconSize),
+                     QBrush(QColor(200, 200, 200)));
     QColor pixmapColor = color;
     pixmapColor.setAlpha(255);
     painter.setBrush(QBrush(pixmapColor));
@@ -124,7 +128,8 @@ void ColorWidget::setComponentValue(int value)
 void ColorWidget::dragEnterEvent(QDragEnterEvent *event)
 {
     bool hasAlpha;
-    const QColor color = ColorUtility::colorFromMimeData(event->mimeData(), hasAlpha);
+    const QColor color =
+            ColorUtility::colorFromMimeData(event->mimeData(), hasAlpha);
     if (color.isValid())
     {
         event->acceptProposedAction();
@@ -211,12 +216,14 @@ int ColorWidget::hue() const
         return mExplicitHue;
 }
 
-void ColorWidget::alterColor(QColor &color, int value, ColorComponent component) const
+void ColorWidget::alterColor(QColor &color, int value,
+                             ColorComponent component) const
 {
     int h, s, v, a;
     color.getHsv(&h, &s, &v, &a);
 
-    const int clippedValue = std::min(std::max(0, value), componentRange(component));
+    const int clippedValue =
+            std::min(std::max(0, value), componentRange(component));
 
     switch (component)
     {

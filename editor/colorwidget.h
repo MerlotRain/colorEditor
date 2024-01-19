@@ -20,7 +20,8 @@ public:
         Alpha,
     };
 
-    explicit ColorWidget(QWidget *parent = nullptr, ColorComponent component = Multiple);
+    explicit ColorWidget(QWidget *parent = nullptr,
+                         ColorComponent component = Multiple);
     QColor color() const;
     ColorComponent component() const;
     int componentValue() const;
