@@ -1,8 +1,10 @@
 #include "colorrampwidget.h"
 #include "../colorutility.h"
 #include <QFontMetrics>
+#include <QMouseEvent>
 #include <QPainter>
 #include <QStyleOptionFrame>
+#include <QtCore/qnamespace.h>
 
 class ColorRampWidgetPrivate
 {
@@ -181,33 +183,165 @@ void ColorRampWidget::paintEvent(QPaintEvent *event)
     }
 }
 
-void ColorRampWidget::setOrientation(Orientation orientation) {}
+void ColorRampWidget::setOrientation(Orientation orientation)
+{
+    d->orientation = orientation;
+    if (d->orientation == ColorRampWidget::Horizontal)
+    {
+        setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+    }
+    else
+    {
+        setSizePolicy(QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
+    }
+    updateGeometry();
+}
 
 ColorRampWidget::Orientation ColorRampWidget::orientation() const
 {
-    return Orientation();
+    return d->orientation;
 }
 
-void ColorRampWidget::setInteriorMargin(int margin) {}
+void ColorRampWidget::setInteriorMargin(int margin)
+{
+    if (d->margin == margin) return;
+    d->margin = margin;
+    update();
+}
 
-int ColorRampWidget::interiorMargin() const { return 0; }
+int ColorRampWidget::interiorMargin() const { return d->margin; }
 
-void ColorRampWidget::setShowFrame(bool show) {}
+void ColorRampWidget::setShowFrame(bool show)
+{
+    if (d->showFrame == show) return;
+    d->showFrame = show;
+    update();
+}
 
-bool ColorRampWidget::showFrame() const { return false; }
+bool ColorRampWidget::showFrame() const { return d->showFrame; }
 
-void ColorRampWidget::setMarkerSize(int size) {}
+void ColorRampWidget::setMarkerSize(int size)
+{
+    d->topTriangle << QPoint(-size, 0) << QPoint(size, 0) << QPoint(0, size);
+    d->bottomTriangle << QPoint(-size, 0) << QPoint(size, 0)
+                      << QPoint(0, -size);
+    update();
+}
 
-void ColorRampWidget::resizeEvent(QResizeEvent *event) {}
+void ColorRampWidget::mouseMoveEvent(QMouseEvent *event)
+{
+    if (d->isDragging)
+    {
+        d->setColorFromPoint(event->pos());
+    }
+    ColorWidget::mouseMoveEvent(event);
+}
 
-void ColorRampWidget::mouseMoveEvent(QMouseEvent *event) {}
+void ColorRampWidget::mousePressEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton)
+    {
+        d->isDragging = true;
+        d->setColorFromPoint(event->pos());
+    }
+    else
+    {
+        ColorWidget::mousePressEvent(event);
+    }
+}
 
-void ColorRampWidget::mousePressEvent(QMouseEvent *event) {}
+void ColorRampWidget::mouseReleaseEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton)
+    {
+        d->isDragging = false;
+    }
+    else
+    {
+        ColorWidget::mouseReleaseEvent(event);
+    }
+}
 
-void ColorRampWidget::mouseReleaseEvent(QMouseEvent *event) {}
+void ColorRampWidget::keyPressEvent(QKeyEvent *event)
+{
 
-void ColorRampWidget::keyPressEvent(QKeyEvent *event) {}
+    const int oldValue = componentValue();
+    if ((d->orientation == ColorRampWidget::Horizontal &&
+         (event->key() == Qt::Key_Right || event->key() == Qt::Key_Up)) ||
+        (d->orientation == ColorRampWidget::Vertical &&
+         (event->key() == Qt::Key_Left || event->key() == Qt::Key_Up)))
+    {
+        setComponentValue(componentValue() + 1);
+    }
+    else if ((d->orientation == ColorRampWidget::Horizontal &&
+              (event->key() == Qt::Key_Left || event->key() == Qt::Key_Down)) ||
+             (d->orientation == ColorRampWidget::Vertical &&
+              (event->key() == Qt::Key_Right || event->key() == Qt::Key_Down)))
+    {
+        setComponentValue(componentValue() - 1);
+    }
+    else if ((d->orientation == ColorRampWidget::Horizontal &&
+              event->key() == Qt::Key_PageDown) ||
+             (d->orientation == ColorRampWidget::Vertical &&
+              event->key() == Qt::Key_PageUp))
+    {
+        setComponentValue(componentValue() + 10);
+    }
+    else if ((d->orientation == ColorRampWidget::Horizontal &&
+              event->key() == Qt::Key_PageUp) ||
+             (d->orientation == ColorRampWidget::Vertical &&
+              event->key() == Qt::Key_PageDown))
+    {
+        setComponentValue(componentValue() - 10);
+    }
+    else if ((d->orientation == ColorRampWidget::Horizontal &&
+              event->key() == Qt::Key_Home) ||
+             (d->orientation == ColorRampWidget::Vertical &&
+              event->key() == Qt::Key_End))
+    {
+        setComponentValue(0);
+    }
+    else if ((d->orientation == ColorRampWidget::Horizontal &&
+              event->key() == Qt::Key_End) ||
+             (d->orientation == ColorRampWidget::Vertical &&
+              event->key() == Qt::Key_Home))
+    {
+        setComponentValue(componentRange());
+    }
+    else
+    {
+        ColorWidget::keyPressEvent(event);
+        return;
+    }
+
+    if (componentValue() != oldValue)
+    {
+        emit colorChanged(mCurrentColor);
+        emit valueChanged(componentValue());
+    }
+}
 
 /* ------------------------- ColorRampWidgetPrivate ------------------------- */
 
-void ColorRampWidgetPrivate::setColorFromPoint(QPointF point) {}
+void ColorRampWidgetPrivate::setColorFromPoint(QPointF point)
+{
+    const int oldValue = q->componentValue();
+    int val;
+    if (orientation == ColorRampWidget::Horizontal)
+    {
+        val = q->componentRange() * (point.x() - margin) /
+              (q->width() - 2 * margin);
+    }
+    else
+    {
+        val = q->componentRange() - q->componentRange() * (point.y() - margin) /
+                                            (q->height() - 2 * margin);
+    }
+    val = std::max(0, std::min(val, q->componentRange()));
+    q->setComponentValue(val);
+    if (oldValue != q->componentValue())
+    {
+        emit q->colorChanged(q->mCurrentColor);
+        emit q->valueChanged(q->componentValue());
+    }
+}
